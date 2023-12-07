@@ -1,0 +1,5 @@
+/.idea/*
+!/.idea/runConfigurations/
+!/.idea/modules.xml
+/bin/
+developer_key

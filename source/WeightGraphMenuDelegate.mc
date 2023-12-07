@@ -4,16 +4,20 @@ import Toybox.WatchUi;
 
 class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate {
 
-    function initialize() {
+    function initialize() 
+    {
         MenuInputDelegate.initialize();
     }
 
-    function onMenuItem(item as Symbol) as Void {
-        if (item == :item_1) {
+    function onMenuItem(item as Symbol) as Void 
+    {
+        if (item == :item_1) 
+        {
             System.println("item 1");
-        } else if (item == :item_2) {
+        } 
+        else if (item == :item_2) 
+        {
             System.println("item 2");
         }
     }
-
 }

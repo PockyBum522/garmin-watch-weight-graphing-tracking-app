@@ -3,11 +3,13 @@ import Toybox.WatchUi;
 
 class WeightGraphDelegate extends WatchUi.BehaviorDelegate {
 
-    function initialize() {
+    function initialize() 
+    {
         BehaviorDelegate.initialize();
     }
 
-    function onMenu() as Boolean {
+    function onMenu() as Boolean 
+    {
         WatchUi.pushView(new Rez.Menus.MainMenu(), new WeightGraphMenuDelegate(), WatchUi.SLIDE_UP);
         return true;
     }

@@ -6,10 +6,10 @@ using Toybox.Time.Gregorian;
 
 class WeightGraphApp extends Application.AppBase 
 {
-    private var _view as Null or View;
+    private var _view as Null or WeightGraphView;
 
-    public var _weightRecords as Null or Array<Float>;
-    public var _dateRecords as Null or Array<String>;
+    public var WeightRecords as Array<Float> = [ 0.0 ] as Array<Float>;
+    public var DateRecords as Array<String> = [ "" ] as Array<String>;
 
     function initialize() 
     {
@@ -19,22 +19,7 @@ class WeightGraphApp extends Application.AppBase
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void 
     {
-        _weightRecords = Application.Storage.getValue("weight_records") as Array<Float>;
-        _dateRecords = Application.Storage.getValue("date_records") as Array<String>;
-
-        System.println("Loaded saved data:");
-        debugPrintWeightsAndDates();
-
-        System.println("");
-
-        //addNewWeight(214.2);
-
-        System.println("");
-        
-        // System.println("_weightRecords.size:");
-        // System.println(_weightRecords.size());
-        
-        updateMainViewWithLastWeight();
+               
     }
 
     // onStop() is called when your application is exiting
@@ -46,21 +31,35 @@ class WeightGraphApp extends Application.AppBase
         System.println("Saving weight array and date array");
 
         // Clear arrays:
-        // _weightRecords = [];
-        // _dateRecords = [];
+        // WeightRecords = [];
+        // DateRecords = [];
 
         //addNewWeight(210.4f);
 
-        Storage.setValue("weight_records", _weightRecords);
-        Storage.setValue("date_records", _dateRecords);
+        Storage.setValue("weight_records", WeightRecords);
+        Storage.setValue("date_records", DateRecords);
     }
 
     // Return the initial view of your application here
     function getInitialView() as Array<Views or InputDelegates>? 
     {
+        WeightRecords = Application.Storage.getValue("weight_records") as Array<Float>;
+        DateRecords = Application.Storage.getValue("date_records") as Array<String>;
+
+        System.println("Loaded saved data:");
+        debugPrintWeightsAndDates();
+
+        System.println("");
+
+        // addNewWeight(210.8);
+
         _view = new WeightGraphView();
 
-        return [_view, new WeightGraphDelegate() ] as Array<Views or InputDelegates>;
+        System.println("When initializing WeightGraphDelegate():");
+        System.println(WeightRecords);
+        System.println(DateRecords);
+
+        return [_view, new WeightGraphDelegate(WeightRecords, DateRecords) ] as Array<Views or InputDelegates>;
     }
 
     function getView() as Null or View
@@ -70,18 +69,21 @@ class WeightGraphApp extends Application.AppBase
 
     function addNewWeight(weightValue as Float) as Void
     {
-        if (_weightRecords != null)
+        if (WeightRecords != null)
         {
-            _weightRecords.add(weightValue);
+            WeightRecords.add(weightValue);
         }
         
-        if (_dateRecords != null)
+        if (DateRecords != null)
         {
-            _dateRecords.add(getNowDateTimestampString());
+            DateRecords.add(getNowDateTimestampString());
         }        
 
         System.println("Added new weight and date:");
         debugPrintWeightsAndDates();
+
+        Storage.setValue("weight_records", WeightRecords);
+        Storage.setValue("date_records", DateRecords);
     }
 
     function getNowDateTimestampString() as String
@@ -108,46 +110,14 @@ class WeightGraphApp extends Application.AppBase
     function debugPrintWeightsAndDates() as Void
     {
         System.println("Weight records:");
-        System.println(_weightRecords);
+        System.println(WeightRecords);
 
         System.println("");
 
         System.println("Date records:");
-        System.println(_dateRecords);
+        System.println(DateRecords);
 
         System.println("");
-    }
-
-    function updateMainViewWithLastWeight() as Void
-    {
-        if (_weightRecords != null)
-        {
-            if (_weightRecords.size() > 0)
-            {       
-                var weightRecordsSize = 0;
-
-                if (_weightRecords != null)
-                {   
-                    weightRecordsSize = _weightRecords.size() as Number;
-                }
-
-                if (_weightRecords != null)
-                {
-                    System.println("_weightRecords.size:");
-                    System.println(weightRecordsSize);
-                
-                }
-                
-                        
-                // var lastWeight = _weightRecords[_weightRecords.size() - 1] as Array<Float>;
-                // var lastDate = "5"; //_dateRecords.slice(_dateRecords.size() - 1, _dateRecords.size());
-
-                // System.println("Updating main view:");
-                // System.println(lastWeight + " | " + lastDate);
-            
-                // _view.updateLastWeight(lastWeight, lastDate);
-            }                
-        }
     }
 }
 

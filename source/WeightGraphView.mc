@@ -1,7 +1,10 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
+import Toybox.Lang;
 
-class WeightGraphView extends WatchUi.View {
+class WeightGraphView extends WatchUi.View 
+{
+    private var _lastWeight as Null or Text;
 
     function initialize() 
     {
@@ -12,6 +15,10 @@ class WeightGraphView extends WatchUi.View {
     function onLayout(dc as Dc) as Void 
     {
         setLayout(Rez.Layouts.MainLayout(dc));
+
+        _lastWeight = findDrawableById("last_weight_recorded") as Text;
+
+        //updateLastWeight((220.2).toFloat());
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -35,5 +42,17 @@ class WeightGraphView extends WatchUi.View {
     function onHide() as Void 
     {
 
+    }
+
+    function updateLastWeight(lastWeight as Float, lastDate as String) as Void
+    {
+            var value = lastWeight.format("%.1f");
+
+            if (_lastWeight != null)
+            {
+                _lastWeight.setText("Last: " + value + "\n" + lastDate);
+            }            
+
+            WatchUi.requestUpdate();
     }
 }

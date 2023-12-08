@@ -1,4 +1,6 @@
 <menu id="MainMenu">
-    <menu-item id="item_1" label="Menu itm 1" />
-    <menu-item id="item_2" label="Menu itm 2" />
+    <menu-item id="add_weight" label="Add Weight" />
+    <menu-item id="view_history" label="View History" />
+    <menu-item id="delete_weight" label="Delete Weight" />
+    <menu-item id="settings" label="Settings" />
 </menu>

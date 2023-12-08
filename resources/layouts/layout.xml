@@ -1,5 +1,20 @@
 <layout id="MainLayout">
 
-    <label x="center" y="100" text="Click menu button" color="Graphics.COLOR_WHITE" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+    <label 
+        x="center" 
+        y="20" 
+        text="Weight Graph" 
+        font="Gfx.FONT_SMALL"
+        color="Graphics.COLOR_WHITE" 
+        justification="Graphics.TEXT_JUSTIFY_CENTER" />
+    
+    <label 
+        id="last_weight_recorded"
+        x="center" 
+        y="190" 
+        text="Last: 000.0" 
+        font="Gfx.FONT_SMALL"
+        color="Graphics.COLOR_WHITE" 
+        justification="Graphics.TEXT_JUSTIFY_CENTER" />
 
 </layout>

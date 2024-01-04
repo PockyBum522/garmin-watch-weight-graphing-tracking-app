@@ -41,8 +41,6 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
         } 
         else if (item == :add_weight) 
         {
-            // parentApp.addNewWeight(210.3);
-
             System.println("Add weight menu option selected");
 
             var mainView = parentApp.getView();

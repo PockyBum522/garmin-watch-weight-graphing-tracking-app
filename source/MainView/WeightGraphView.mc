@@ -26,7 +26,9 @@ class WeightGraphView extends WatchUi.View
     // loading resources into memory.
     function onShow() as Void
     {
+        _lastWeightLabel = findDrawableById("last_weight_recorded") as Text;
 
+        updateLastWeightLabel();
     }
 
     // Update the view
@@ -58,7 +60,6 @@ class WeightGraphView extends WatchUi.View
         System.println("about to test WeightGraphApp");
 
         weightRecords = parentApp.WeightRecords;
-
 
         if (weightRecords != null)
         {

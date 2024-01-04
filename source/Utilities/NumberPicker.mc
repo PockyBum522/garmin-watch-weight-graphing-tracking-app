@@ -54,6 +54,8 @@ class NumberPicker extends WatchUi.Picker
 
 class NumberPickerDelegate extends WatchUi.PickerDelegate 
 {
+    private var _weightRecords as Null or Array<Float>;
+    private var _dateRecords as Null or Array<String>;
 
     function initialize( ) 
     {
@@ -82,6 +84,90 @@ class NumberPickerDelegate extends WatchUi.PickerDelegate
 
         WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
 
+        _weightRecords = getApp().WeightRecords;
+        _dateRecords = getApp().DateRecords;
+
+        var historyMenu = initializeHistoryMenuItemsWithWeightRecords();
+
+        WatchUi.pushView(historyMenu, new WeightHistoryMenuDelegate(_weightRecords, _dateRecords), WatchUi.SLIDE_UP);
+
         return true;
+    }
+
+    function initializeHistoryMenuItemsWithWeightRecords() as WatchUi.Menu2
+    {
+        var menu = new WatchUi.Menu2({:title=>"History"});
+        var delegate;
+
+        var weightRecordsCount = 0;
+
+        if (_weightRecords == null)
+        {
+            menu.addItem(
+                new MenuItem(
+                    "No",        // Set the 'Label' parameter
+                    "records",          // Set the `subLabel` parameter
+                    "itemIdNone",    // Set the `identifier` parameter
+                    {}                          // Set the options, in this case `null`
+                )
+            );
+        }
+
+        if (_weightRecords != null)
+        {
+            weightRecordsCount = _weightRecords.size();
+        }
+
+        for (var i = weightRecordsCount - 1; i >= 0; i--)
+        {
+            var currentWeightRecord = 0.0;
+            var currentDateRecord = "";
+
+            if (_weightRecords != null)
+            {
+                var fetchedWeight = 0.0;
+
+                if (_weightRecords[i] != null)
+                {
+                    fetchedWeight = _weightRecords[i] as Float;
+                }               
+
+                currentWeightRecord = fetchedWeight;
+            }
+
+            if (_dateRecords != null)
+            {
+                var fetchedDate = "ERROR";
+
+                if (_dateRecords[i] != null)
+                {
+                    fetchedDate = _dateRecords[i] as String;
+                }
+
+                if (_dateRecords[i] == "")
+                {
+                    fetchedDate = "ERROR";
+                }
+                
+                currentDateRecord = fetchedDate;
+            }
+            
+            var currentWeightString = (currentWeightRecord as Float).format("%.1f") as String;
+
+            menu.addItem(
+                new MenuItem(
+                    currentWeightString,        // Set the 'Label' parameter
+                    currentDateRecord,          // Set the `subLabel` parameter
+                    "itemId" + i.toString(),    // Set the `identifier` parameter
+                    {}                          // Set the options, in this case `null`
+                )
+            );
+        }
+
+        delegate = new WeightHistoryMenuItemDelegate(); // a WatchUi.Menu2InputDelegate
+
+        WatchUi.pushView(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
+
+        return menu;
     }
 }

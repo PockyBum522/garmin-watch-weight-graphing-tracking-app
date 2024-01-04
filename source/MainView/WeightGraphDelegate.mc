@@ -33,4 +33,13 @@ class WeightGraphDelegate extends WatchUi.BehaviorDelegate
 
         return true;
     }
+    
+    function onSelect() as Boolean 
+    {
+        System.println("Menu loading!");
+
+        WatchUi.pushView(new Rez.Menus.MainMenu(), new WeightGraphMenuDelegate(_weightRecords, _dateRecords), WatchUi.SLIDE_UP);
+
+        return true;
+    }
 }

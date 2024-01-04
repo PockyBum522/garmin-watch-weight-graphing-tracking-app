@@ -8,7 +8,7 @@ class WeightGraphView extends WatchUi.View
 
     function initialize() 
     {
-             View.initialize();
+        View.initialize();
     }
 
     // Load your resources here
@@ -24,13 +24,13 @@ class WeightGraphView extends WatchUi.View
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
-    function onShow() as Void 
+    function onShow() as Void
     {
 
     }
 
     // Update the view
-    function onUpdate(dc as Dc) as Void 
+    function onUpdate(dc as Dc) as Void
     {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
@@ -48,7 +48,7 @@ class WeightGraphView extends WatchUi.View
     {
         _lastWeightLabel = findDrawableById("last_weight_recorded") as Text;
 
-        var weightRecords = [ 0.0 ];
+        var weightRecords = [ ] as Array<Float>;
         var weightRecordsCount = 0;
         var lastWeight = 0.0f;
         var lastDate = "";
@@ -57,17 +57,23 @@ class WeightGraphView extends WatchUi.View
 
         System.println("about to test WeightGraphApp");
 
-        if (parentApp != null)
-        {
-            weightRecords = parentApp.WeightRecords;
-        }
+        weightRecords = parentApp.WeightRecords;
 
-        weightRecordsCount = weightRecords.size();
-        System.println("weightRecordsCount: " + weightRecordsCount);
+
+        if (weightRecords != null)
+        {
+            weightRecordsCount = weightRecords.size();
+            System.println("weightRecordsCount: " + weightRecordsCount);
+        }
         
-        lastWeight = weightRecords[weightRecordsCount - 1];
+        var lastWeightString = "None";
+
+        if (weightRecordsCount > 0)
+        {
+            lastWeight = weightRecords[weightRecordsCount - 1];
                 
-        var lastWeightString = (lastWeight as Float).format("%.1f") as String;
+            lastWeightString = (lastWeight as Float).format("%.1f") as String;
+        }
 
         if (_lastWeightLabel != null)
         {

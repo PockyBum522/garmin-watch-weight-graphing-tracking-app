@@ -1,6 +1,7 @@
 <menu id="MainMenu">
-    <menu-item id="add_weight" label="Add Weight" />
+    <menu-item id="add_weight" label="Add Weight" />    
     <menu-item id="view_history" label="View History" />
-    <menu-item id="delete_weight" label="Delete Weight" />
-    <menu-item id="settings" label="Settings" />
+    <menu-item id="add_random_weight" label="Add Rnd. for Test" />    
+    <menu-item id="open_settings" label="Settings" />
+    <menu-item id="delete_all" label="Delete ALL Weights" />
 </menu>

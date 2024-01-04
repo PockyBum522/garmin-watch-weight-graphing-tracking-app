@@ -8,8 +8,8 @@ class WeightGraphApp extends Application.AppBase
 {
     private var _view as Null or WeightGraphView;
 
-    public var WeightRecords as Array<Float> = [ 0.0 ] as Array<Float>;
-    public var DateRecords as Array<String> = [ "" ] as Array<String>;
+    public var WeightRecords as Array<Float> = [] as Array<Float>;
+    public var DateRecords as Array<String> = [] as Array<String>;
 
     function initialize() 
     {
@@ -19,22 +19,13 @@ class WeightGraphApp extends Application.AppBase
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void 
     {
-               
+        // Math.srand(Sys.getTimer()); 
     }
 
     // onStop() is called when your application is exiting
     function onStop(state as Dictionary?) as Void 
     {
-        // var testWeights = [213, 212.4, 212.6, 215.8, 214.2];
-        // var testDates = [ "2023-11-27", "2023-11-28", "2023-11-29", "2023-11-30", "2023-12-01" ];
-
         System.println("Saving weight array and date array");
-
-        // Clear arrays:
-        // WeightRecords = [];
-        // DateRecords = [];
-
-        //addNewWeight(210.4f);
 
         Storage.setValue("weight_records", WeightRecords);
         Storage.setValue("date_records", DateRecords);
@@ -51,11 +42,10 @@ class WeightGraphApp extends Application.AppBase
 
         System.println("");
 
-        // addNewWeight(210.8);
-
         _view = new WeightGraphView();
 
-        System.println("When initializing WeightGraphDelegate():");
+        System.println("About to initialize WeightGraphDelegate() in WeightGraphApp:");
+        
         System.println(WeightRecords);
         System.println(DateRecords);
 
@@ -77,8 +67,15 @@ class WeightGraphApp extends Application.AppBase
         if (DateRecords != null)
         {
             DateRecords.add(getNowDateTimestampString());
-        }        
+        }   
 
+        // Handle if they're null, which happens if there are no entries, such as on first use of the app
+        if (WeightRecords == null)
+        {
+            WeightRecords = [ weightValue ] as Array<Float>;
+            DateRecords = [ getNowDateTimestampString() ] as Array<String>;
+        }
+     
         System.println("Added new weight and date:");
         debugPrintWeightsAndDates();
 
@@ -102,7 +99,7 @@ class WeightGraphApp extends Application.AppBase
             ]
         );
 
-        //System.println(dateString); // e.g. "16:28:32 2017-12-31"
+        //System.println(dateString); // e.g. "2030-12-31 23:59:59"
 
         return dateString; 
     }
@@ -118,6 +115,15 @@ class WeightGraphApp extends Application.AppBase
         System.println(DateRecords);
 
         System.println("");
+    }
+
+    function deleteAllWeightRecords() as Void
+    {
+        WeightRecords = [] as Array<Float>;
+        DateRecords = [] as Array<String>;
+    
+        Storage.setValue("weight_records", WeightRecords);
+        Storage.setValue("date_records", DateRecords);
     }
 }
 

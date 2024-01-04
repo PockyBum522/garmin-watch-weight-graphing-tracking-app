@@ -2,6 +2,9 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.WatchUi;
 
+using Toybox.Math;
+using Toybox.System; 
+
 class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate 
 {
     private var _weightRecords as Null or Array<Float>;
@@ -26,21 +29,40 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
 
     function onMenuItem(item as Symbol) as Void 
     {
-        if (item == :add_weight) 
-        {
-            System.println("Add weight menu option selected");
-        } 
-        else if (item == :view_history) 
+        var parentApp = getApp();
+
+        if (item == :view_history) 
         {
             System.println("History menu loading!");
 
             _historyMenu = initializeHistoryMenuItemsWithWeightRecords();
 
             WatchUi.pushView(_historyMenu, new WeightHistoryMenuDelegate(_weightRecords, _dateRecords), WatchUi.SLIDE_UP);
-        }
-        else if (item == :settings) 
+        } 
+        else if (item == :add_weight) 
         {
-            System.println("Add Weight menu option selected");
+            // parentApp.addNewWeight(210.3);
+
+            System.println("Add weight menu option selected");
+
+            var mainView = parentApp.getView();
+
+            if (mainView != null)
+            {
+                System.println("About to launch add weight number picker");
+
+                WatchUi.pushView(new NumberPicker(), new NumberPickerDelegate(), WatchUi.SLIDE_UP);
+            }            
+        }
+        else if (item == :open_settings) 
+        {
+            System.println("Settings menu option selected");
+        } 
+        else if (item == :delete_all) 
+        {
+            System.println("Delete all weight records menu option selected");
+
+            parentApp.deleteAllWeightRecords();
         } 
     }
 
@@ -50,6 +72,18 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
         var delegate;
 
         var weightRecordsCount = 0;
+
+        if (_weightRecords == null)
+        {
+            menu.addItem(
+                new MenuItem(
+                    "No",        // Set the 'Label' parameter
+                    "records",          // Set the `subLabel` parameter
+                    "itemIdNone",    // Set the `identifier` parameter
+                    {}                          // Set the options, in this case `null`
+                )
+            );
+        }
 
         if (_weightRecords != null)
         {
@@ -63,37 +97,47 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
 
             if (_weightRecords != null)
             {
-                currentWeightRecord = _weightRecords[i] as Float;
+                var fetchedWeight = 0.0;
+
+                if (_weightRecords[i] != null)
+                {
+                    fetchedWeight = _weightRecords[i] as Float;
+                }               
+
+                currentWeightRecord = fetchedWeight;
             }
 
             if (_dateRecords != null)
             {
-                currentDateRecord = _dateRecords[i] as String;
+                var fetchedDate = "ERROR";
+
+                if (_dateRecords[i] != null)
+                {
+                    fetchedDate = _dateRecords[i] as String;
+                }
+
+                if (_dateRecords[i] == "")
+                {
+                    fetchedDate = "ERROR";
+                }
+                
+                currentDateRecord = fetchedDate;
             }
             
             var currentWeightString = (currentWeightRecord as Float).format("%.1f") as String;
 
             menu.addItem(
                 new MenuItem(
-
-                    // Set the 'Label' parameter
-                    currentWeightString,
-
-                    // Set the `subLabel` parameter
-                    currentDateRecord,
-
-                    // Set the `identifier` parameter
-                    "itemId" + i.toString(),
-                    // Set the options, in this case `null`
-                    {}
+                    currentWeightString,        // Set the 'Label' parameter
+                    currentDateRecord,          // Set the `subLabel` parameter
+                    "itemId" + i.toString(),    // Set the `identifier` parameter
+                    {}                          // Set the options, in this case `null`
                 )
             );
         }
 
-        // Create a new Menu2InputDelegate
         delegate = new WeightHistoryMenuItemDelegate(); // a WatchUi.Menu2InputDelegate
 
-        // Push the Menu2 View set up in the initializer
         WatchUi.pushView(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
 
         return menu;

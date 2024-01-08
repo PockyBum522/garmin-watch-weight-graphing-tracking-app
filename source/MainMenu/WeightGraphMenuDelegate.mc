@@ -71,18 +71,13 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
 
         var weightRecordsCount = 0;
 
+        // If _weightRecords is null, then display a placeholder entry telling the user there's no records
         if (_weightRecords == null)
         {
-            menu.addItem(
-                new MenuItem(
-                    "No",        // Set the 'Label' parameter
-                    "records",          // Set the `subLabel` parameter
-                    "itemIdNone",    // Set the `identifier` parameter
-                    {}                          // Set the options, in this case `null`
-                )
-            );
+            menu.addItem(new MenuItem("No", "records", "itemIdNone", {}));
         }
 
+        // And the rest of this method handles normal formatting and displaying of records
         if (_weightRecords != null)
         {
             weightRecordsCount = _weightRecords.size();
@@ -123,18 +118,11 @@ class WeightGraphMenuDelegate extends WatchUi.MenuInputDelegate
             }
             
             var currentWeightString = (currentWeightRecord as Float).format("%.1f") as String;
-
-            menu.addItem(
-                new MenuItem(
-                    currentWeightString,        // Set the 'Label' parameter
-                    currentDateRecord,          // Set the `subLabel` parameter
-                    "itemId" + i.toString(),    // Set the `identifier` parameter
-                    {}                          // Set the options, in this case `null`
-                )
-            );
+            
+            menu.addItem(new MenuItem(currentWeightString, currentDateRecord, "itemId" + i.toString(), {}));
         }
 
-        delegate = new WeightHistoryMenuItemDelegate(); // a WatchUi.Menu2InputDelegate
+        delegate = new WeightHistoryMenuItemDelegate();
 
         WatchUi.pushView(menu, delegate, WatchUi.SLIDE_IMMEDIATE);
 

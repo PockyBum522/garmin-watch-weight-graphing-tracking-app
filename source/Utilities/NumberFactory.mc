@@ -44,5 +44,4 @@ class NumberFactory extends WatchUi.PickerFactory
     {
         return ((stopNum - startNum) / incVal + 1) as Number;
     }
-
 }
